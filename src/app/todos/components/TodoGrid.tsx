@@ -1,5 +1,5 @@
 import { Todo } from "@prisma/client";
-import React, { useState } from "react";
+import React from "react";
 import { TodoItem } from "./TodoItem";
 import { NewTodo } from "./NewTodo";
 
