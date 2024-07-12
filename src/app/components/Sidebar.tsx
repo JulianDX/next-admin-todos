@@ -17,6 +17,12 @@ const links = [
     title: "Test",
     href: "/dashboard/testdash",
   },
+  {
+    tag: "server-todos",
+    icon: <CiLogout size={30} />,
+    title: "Server Actions",
+    href: "/dashboard/server-todos",
+  },
 ];
 
 const Sidebar = () => {
