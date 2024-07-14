@@ -1,11 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { startTransition, useOptimistic } from "react";
 import styles from "./TodoItem.module.css";
 import { IoIosCheckbox, IoIosCheckboxOutline } from "react-icons/io";
 import { Todo } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import { apiCall } from "../helpers";
 import { toggleTodo } from "../actions/todo-actions";
 
 interface TodoItemProps {
@@ -13,26 +11,47 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  const { refresh } = useRouter();
+  /*  const { refresh } = useRouter(); */
 
   /* const toggleTodo = async (id: string, complete: boolean) => {
     await apiCall(id, complete);
     refresh();
   }; */
 
+  const [todoOptimistic, toggleTodoOptimistic] = useOptimistic(
+    todo, // Valor inicial
+    (state, newCompleteValue: boolean) => ({
+      ...state, // Valor por el que queremos que se vea reemplazado en pantalla
+      complete: newCompleteValue,
+    })
+  );
+
+  const onToggleTodo = async () => {
+    try {
+      startTransition(() => toggleTodoOptimistic(!todoOptimistic.complete));
+      await toggleTodo(todoOptimistic.id);
+    } catch (error) {
+      startTransition(() => toggleTodoOptimistic(!todoOptimistic.complete));
+    }
+  };
+
   return (
-    <div className={`${todo.complete ? styles.todoDone : styles.todoPending}`}>
+    <div
+      className={`${
+        todoOptimistic.complete ? styles.todoDone : styles.todoPending
+      }`}
+    >
       <div
-        onClick={() => toggleTodo(todo.id)}
+        onClick={() => onToggleTodo()}
         className="p-1 bg-gray-500 bg-opacity-20 rounded-lg cursor-pointer"
       >
-        {todo.complete ? (
+        {todoOptimistic.complete ? (
           <IoIosCheckbox size={25} />
         ) : (
           <IoIosCheckboxOutline size={25} />
         )}
       </div>
-      <div>{todo.description}</div>
+      <div>{todoOptimistic.description}</div>
     </div>
   );
 };

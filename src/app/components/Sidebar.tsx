@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { CiBookmarkCheck, CiLogout } from "react-icons/ci";
+import { CiBookmarkCheck, CiLogout, CiChat1 } from 'react-icons/ci';
 import SidebarItem from "./SidebarItem";
+import { IoBasketOutline } from "react-icons/io5";
 
 const links = [
   {
@@ -22,6 +23,18 @@ const links = [
     icon: <CiLogout size={30} />,
     title: "Server Actions",
     href: "/dashboard/server-todos",
+  },
+  {
+    tag: "cookies",
+    icon: <CiChat1 size={30} />,
+    title: "Cookies",
+    href: "/dashboard/cookies",
+  },
+  {
+    tag: "products",
+    icon: <IoBasketOutline size={30} />,
+    title: "Productos",
+    href: "/dashboard/products",
   },
 ];
 
